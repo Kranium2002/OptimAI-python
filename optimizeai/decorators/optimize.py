@@ -6,8 +6,8 @@ import functools
 from io import StringIO
 import sys
 from perfwatch import watch
-from optimai.llm_wrapper import LLMWrapper
-from optimai.config import Config
+from optimizeai.llm_wrapper import LLMWrapper
+from optimizeai.config import Config
 
 # Define a context manager to capture stdout
 class CapturingStringIO(StringIO):

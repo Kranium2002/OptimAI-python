@@ -1,4 +1,4 @@
-# optimai/config.py
+# optimizeai/config.py
 
 from dataclasses import dataclass
 

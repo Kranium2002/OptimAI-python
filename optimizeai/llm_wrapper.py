@@ -1,10 +1,10 @@
-# optimai/llm_wrapper.py
+# optimizeai/llm_wrapper.py
 
 import os
 import openai
 import requests
 import google.generativeai as genai
-from optimai.config import Config
+from optimizeai.config import Config
 
 class LLMWrapper:
     """Wrapper class for different LLMs"""
