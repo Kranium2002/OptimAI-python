@@ -15,7 +15,7 @@ OptimAI is a powerful Python module designed to optimize your code by analyzing 
 You can install OptimAI using pip:
 
 ```bash
-pip install optimai
+pip install optimizeai
 ```
 
 ## Setup
@@ -38,8 +38,8 @@ To use OptimAI, you need to configure it with your preferred LLM provider and AP
 Here's a basic example demonstrating how to use OptimAI to optimize a function:
 
 ```python
-from optimai.decorators.optimize import optimize
-from optimai.config import Config
+from optimizeai.decorators.optimize import optimize
+from optimizeai.config import Config
 from dotenv import load_dotenv
 import time
 import os
