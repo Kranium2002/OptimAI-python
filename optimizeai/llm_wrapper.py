@@ -1,93 +1,51 @@
 # optimizeai/llm_wrapper.py
-
 import os
-import openai
-import requests
-import google.generativeai as genai
+import dspy
+from dotenv import load_dotenv
+import dsp
 from optimizeai.config import Config
 
-class LLMWrapper:
-    """Wrapper class for different LLMs"""
+load_dotenv()
 
+# Define the signature class with Chain of Thought
+class ZeroShotQAWithCoT(dspy.Signature):
+    """Optimize the function to reduce execution time, memory usage, and improve overall efficiency.
+    Provide short detailed technical tips and refactor suggestions, such as algorithm improvements,
+    data structure optimizations, or parallelization strategies if needed."""
+    code = dspy.InputField(desc="Code to be optimized")
+    perf_metrics = dspy.InputField(desc="Performance metrics of the code along with the output of the code execution")
+    answer = dspy.OutputField(desc="The tips on how to optimize the code, with optimized code snippets")
+    rationale = dspy.OutputField(desc="The reasoning behind the optimizations")
+
+class LLMWrapper:
+    """Wrapper class for the Language Model (LLM) to interact with the model based on the configuration provided."""
     def __init__(self, config: Config):
         self.llm_name = config.llm
-        self.model = config.model
         self.api_key = config.key
-        self.mode = config.mode
-        self.openai_client = ""
-        self.setup_llm()
+        self.model_name = config.model
+        self.mode = "offline"
+        self.__setup_llm()
 
-    def setup_llm(self):
-        """Setup the LLM based on the name and mode provided in the config"""
-
-        if self.llm_name.startswith("openai"):
-            self.openai_client = openai.OpenAI(api_key=self.api_key)
-            self.llm = self.openai_llm
-        elif self.llm_name.startswith("huggingface"):
-            os.environ["HUGGINGFACEHUB_API_TOKEN"] = self.api_key
-            self.llm = self.huggingface_llm
-        elif self.llm_name.startswith("google"):
-            genai.configure(api_key=self.api_key)
-            self.llm = self.google_llm
+    def __setup_llm(self):
+        """Setup the LLM model based on the configuration provided."""
+        if self.llm_name == "google":
+            self.llm = dspy.Google(model=self.model_name, api_key=self.api_key)
+        elif self.llm_name == "openai":
+            self.llm = dspy.OpenAI(model=self.model_name, api_key=self.api_key)
+        elif self.llm_name == "anthropic":
+            self.llm = dsp.anthropic.Claude(model=self.model_name, api_key=self.api_key)
+        elif self.llm_name == "huggingface" and self.mode=="offline":
+            self.llm = dspy.HFModel(model=self.model_name)
         else:
             raise ValueError(f"Unsupported LLM: {self.llm_name}")
 
-    def openai_llm(self, prompt):
-        """Call the appropriate function based on the mode provided in the config"""
+        dspy.settings.configure(lm=self.llm)
 
-        response = self.openai_client.chat.completions.create(
-            model=self.model,
-            messages = [{
-                "role": "system",
-                "content": "You are a helpful assistant."
-            }, {
-                "role": "user",
-                "content": prompt
-            }],
-            max_tokens=150
-        )
-        return response.choices[0].message.content
-
-    def huggingface_llm(self, prompt):
-        """Call the appropriate function based on the mode provided in the config"""
-
-        if self.mode == "online":
-            return self.huggingface_online_llm(prompt)
-        elif self.mode == "offline":
-            return ValueError(f"Unsupported mode: {self.mode}")
-        else:
-            raise ValueError(f"Unsupported mode: {self.mode}")
-
-    def huggingface_online_llm(self, prompt):
-        """Call the Hugging Face API to get the response"""
-
-        headers = {"Authorization": f"Bearer {self.api_key}"}
-        response = requests.post(
-            f"https://api-inference.huggingface.co/models/{self.model}",
-            headers=headers,
-            json={"inputs": prompt}, timeout=10
-        )
-        response.raise_for_status()
-        return response.json()[0]["generated_text"]
-
-    # def huggingface_offline_llm(self, prompt):
-    #     """Use the Hugging Face library to get the response locally"""
-    #     from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
-
-    #     tokenizer = AutoTokenizer.from_pretrained(self.model)
-    #     model = AutoModelForCausalLM.from_pretrained(self.model)
-    #     generator = pipeline('text-generation', model=model, tokenizer=tokenizer)
-    #     response = generator(prompt, max_length=150)
-    #     return response[0]["generated_text"]
-
-    def google_llm(self, prompt):
-        """Call the Google AI API to get the response"""
-
-        model = genai.GenerativeModel(self.model)
-        response = model.generate_content(prompt)
-        return response.text
-
-    def send_request(self, prompt):
-        """Send a request to the LLM and return the response"""
-
-        return self.llm(prompt)
+    def send_request(self, code, perf_metrics):
+        """Send a request to the LLM model with the given prompt and performance metrics.
+        Args: code (str): The code to send to the LLM model.
+              perf_metrics (str): The performance metrics to send to the LLM model.
+        Returns: answer (str): The answer generated by the LLM model."""
+        predictor = dspy.ChainOfThought(ZeroShotQAWithCoT)
+        prediction = predictor(code=code, perf_metrics=perf_metrics)
+        return prediction.answer, prediction.rationale
