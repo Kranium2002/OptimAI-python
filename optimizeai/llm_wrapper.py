@@ -14,8 +14,8 @@ class ZeroShotQAWithCoT(dspy.Signature):
     data structure optimizations, or parallelization strategies if needed."""
     code = dspy.InputField(desc="Code to be optimized")
     perf_metrics = dspy.InputField(desc="Performance metrics of the code along with the output of the code execution")
-    answer = dspy.OutputField(desc="The tips on how to optimize the code, with optimized code snippets")
-    rationale = dspy.OutputField(desc="The reasoning behind the optimizations")
+    answer = dspy.OutputField(desc="The answer to how the code can be optimized")
+    rationale = dspy.OutputField(desc="The rationale behind the optimizations")
 
 class LLMWrapper:
     """Wrapper class for the Language Model (LLM) to interact with the model based on the configuration provided."""

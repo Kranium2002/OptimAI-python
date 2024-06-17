@@ -4,7 +4,6 @@ profiling."""
 import inspect
 import functools
 from io import StringIO
-import sys
 from contextlib import redirect_stdout
 from perfwatch import watch
 from optimizeai.llm_wrapper import LLMWrapper
@@ -23,14 +22,14 @@ def optimize(profiler_types, config: Config):
 
             # Profile the function and capture the output
             with StringIO() as buf, redirect_stdout(buf):
+                watch(profiler_types)(func)(*args, **kwargs)
                 captured_output = buf.getvalue()
 
             # Initialize the LLMWrapper with the provided config
             llm_wrapper = LLMWrapper(config)
-          
             response, _ = llm_wrapper.send_request(code, captured_output)
-            print(response)
             
+            print(response)
             return response
         
         return wrapper
