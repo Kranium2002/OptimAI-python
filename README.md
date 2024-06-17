@@ -33,7 +33,7 @@ To use OptimAI, you need to configure it with your preferred LLM provider and AP
     - Example: `model = "gpt-4"`, `model = "gemini-1.5-flash"`, or any other model specific to the chosen LLM provider.
 
 3. **Set the API Key**:
-    - Use the corresponding API key for the selected LLM provider.
+    - Use the corresponding API key for the selected LLM provider. No API key required for local Huggingface Inference.
 
 ## Sample Code
 
