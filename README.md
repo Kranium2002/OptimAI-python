@@ -8,7 +8,8 @@ OptimAI is a powerful Python module designed to optimize your code by analyzing 
 - Integration with perfwatch for performance profiling.
 - Capture and analyze stdout, function execution time, network usage, function calls, CPU/GPU usage, etc using [perfwatch](https://github.com/Khushiyant/perfwatch).
 - Seamless integration with various LLMs for code optimization suggestions.
-- Support for OpenAI, Google Gemini, and Hugging Face inference.
+- Support for OpenAI, Google Gemini, HuggingFace(offline) and Anthropic.
+- Optimized prompts for best performance on any LLM using [dspy](https://github.com/stanfordnlp/dspy)
 
 ## Installation
 
@@ -20,18 +21,19 @@ pip install optimizeai
 
 ## Setup
 
-To use OptimAI, you need to configure it with your preferred LLM provider and API key. Supported LLM providers include Google (Gemini models), OpenAI, and Hugging Face.
+To use OptimAI, you need to configure it with your preferred LLM provider and API key. Supported LLM providers include Google (Gemini models), OpenAI, HuggingFace and Anthropic.
 
 1. **Select the LLM Provider**:
     - For Google Gemini models: `llm = "google"`
     - For OpenAI models: `llm = "openai"`
-    - For Hugging Face inference: `llm = "huggingface"`
+    - For Hugging Face offline: `llm = "huggingface"`
+    - For Anthropic models: `llm = "anthropic"`
 
 2. **Choose the Model**:
     - Example: `model = "gpt-4"`, `model = "gemini-1.5-flash"`, or any other model specific to the chosen LLM provider.
 
 3. **Set the API Key**:
-    - Use the corresponding API key for the selected LLM provider.
+    - Use the corresponding API key for the selected LLM provider. No API key required for local Huggingface Inference.
 
 ## Sample Code
 
@@ -51,7 +53,7 @@ key = os.getenv("API_KEY")
 model = os.getenv("MODEL")
 
 # Configure LLM
-llm_config = Config(llm=llm, model=model, key=key, mode="online")
+llm_config = Config(llm=llm, model=model, key=key)
 perfwatch_params = ["line", "cpu", "time"]
 
 # Define a test function to be optimized
@@ -79,7 +81,6 @@ MODEL=gemini-1.5-flash
 ## Upcoming Features
 
 - **Ollama Support**: Integrate with the Ollama platform for enhanced LLM capabilities.
-- **Optimized Prompts**: Use domain-specific prompts (dspy) to provide better optimization suggestions.
 - **Improved Context for Code Optimization**: Enhance the context provided to the LLM for more accurate and relevant optimization recommendations.
 
 ## Contributing
