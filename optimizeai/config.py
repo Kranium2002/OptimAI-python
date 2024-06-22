@@ -6,6 +6,6 @@ from dataclasses import dataclass
 class Config:
     """Config class for OptimAI"""
     llm: str
-    key: str = "Enter your API key here"
     model: str
+    key: str = "Enter your API key here"
     mode: str = "online"
