@@ -27,10 +27,10 @@ def optimize(profiler_types, config: Config):
 
             # Initialize the LLMWrapper with the provided config
             llm_wrapper = LLMWrapper(config)
-            response, _ = llm_wrapper.send_request(code, captured_output)
-            
+            response= llm_wrapper.send_request(code = code, perf_metrics=captured_output)
+
             print(response)
             return response
-        
+
         return wrapper
     return decorator
