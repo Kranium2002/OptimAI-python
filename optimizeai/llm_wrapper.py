@@ -1,12 +1,8 @@
 # optimizeai/llm_wrapper.py
-import os
 import dspy
-from dotenv import load_dotenv
 import dsp
 from optimizeai.config import Config
 from optimizeai.cot import CoT
-
-load_dotenv()
 
 # Define the signature class with Chain of Thought
 class ZeroShotQAWithCoT(dspy.Signature):
