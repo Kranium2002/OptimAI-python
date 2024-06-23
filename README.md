@@ -8,7 +8,7 @@ OptimAI is a powerful Python module designed to optimize your code by analyzing 
 - Integration with perfwatch for performance profiling.
 - Capture and analyze stdout, function execution time, network usage, function calls, CPU/GPU usage, etc using [perfwatch](https://github.com/Khushiyant/perfwatch).
 - Seamless integration with various LLMs for code optimization suggestions.
-- Support for OpenAI, Google Gemini, HuggingFace(offline) and Anthropic.
+- Support for OpenAI, Google Gemini, HuggingFace (offline), ollama and Anthropic.
 - Optimized prompts for best performance on any LLM using [dspy](https://github.com/stanfordnlp/dspy)
 
 ## Installation
@@ -21,19 +21,20 @@ pip install optimizeai
 
 ## Setup
 
-To use OptimAI, you need to configure it with your preferred LLM provider and API key. Supported LLM providers include Google (Gemini models), OpenAI, HuggingFace and Anthropic.
+To use OptimAI, you need to configure it with your preferred LLM provider and API key. Supported LLM providers include Google (Gemini models), OpenAI, Ollama, HuggingFace and Anthropic. For Ollama you need to have Ollama installed and the model artifacts also need to be downloaded previously.
 
 1. **Select the LLM Provider**:
     - For Google Gemini models: `llm = "google"`
     - For OpenAI models: `llm = "openai"`
     - For Hugging Face offline: `llm = "huggingface"`
     - For Anthropic models: `llm = "anthropic"`
+    - For local Ollama models: `llm = "ollama"`
 
 2. **Choose the Model**:
-    - Example: `model = "gpt-4"`, `model = "gemini-1.5-flash"`, or any other model specific to the chosen LLM provider.
+    - Example: `model = "gpt-4"`, `model = "gemini-1.5-flash"`, `model = "codegemma"`,  or any other model specific to the chosen LLM provider.
 
 3. **Set the API Key**:
-    - Use the corresponding API key for the selected LLM provider. No API key required for local Huggingface Inference.
+    - Use the corresponding API key for the selected LLM provider. No API key required for local Huggingface Inference and Ollama.
 
 ## Sample Code
 
@@ -80,8 +81,9 @@ MODEL=gemini-1.5-flash
 
 ## Upcoming Features
 
-- **Ollama Support**: Integrate with the Ollama platform for enhanced LLM capabilities.
 - **Improved Context for Code Optimization**: Enhance the context provided to the LLM for more accurate and relevant optimization recommendations.
+- **Report Generation**: Proper optimization report will be generated.
+- **Support for a Better Config**: A better config support is coming through which you can set various llm parameters. 
 
 ## Contributing
 

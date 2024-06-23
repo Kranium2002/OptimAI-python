@@ -1,12 +1,8 @@
 # optimizeai/llm_wrapper.py
-import os
 import dspy
-from dotenv import load_dotenv
 import dsp
 from optimizeai.config import Config
 from optimizeai.cot import CoT
-
-load_dotenv()
 
 # Define the signature class with Chain of Thought
 class ZeroShotQAWithCoT(dspy.Signature):
@@ -39,6 +35,8 @@ class LLMWrapper:
             self.llm = dsp.anthropic.Claude(model=self.model_name, api_key=self.api_key)
         elif self.llm_name == "huggingface" and self.mode=="offline":
             self.llm = dspy.HFModel(model=self.model_name)
+        elif self.llm_name == "ollama" and self.mode=="offline":
+            self.llm = dspy.OllamaLocal(model=self.model_name, max_tokens=500, timeout_s=300)
         else:
             raise ValueError(f"Unsupported LLM: {self.llm_name}")
 
