@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "optimizeai"
-version = "0.1.4"
+version = "0.2.0"
 description = "OptimAI is a powerful Python module designed to optimize your code by analyzing its performance and providing actionable suggestions. It leverages a large language model (LLM) to give you detailed insights and recommendations based on the profiling data collected during the execution of your code."
 authors = ["Vidhu Mathur <vidhumathur2002@gmail.com>"]
 readme = "README.md"
