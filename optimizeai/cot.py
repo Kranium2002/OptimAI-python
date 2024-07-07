@@ -8,7 +8,7 @@ class CoT(dspy.Module):
         super().__init__()
         self.prog = dspy.ChainOfThought(signature)
 
-    def forward(self, code, perf_metrics):
+    def forward(self, code, context, perf_metrics):
         """Forward method to pass the code and performance metrics to the Chain of Thought model."""
-        answer = self.prog(code=code, perf_metrics=perf_metrics)
+        answer = self.prog(code=code, context=context, perf_metrics=perf_metrics)
         return answer
