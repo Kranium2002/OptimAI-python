@@ -1,23 +1,16 @@
 """This module contains the optimize decorator for
 optimizing Python functions using LLMs and performance
 profiling."""
-from optimizeai.llm_wrapper import LLMWrapper
-from optimizeai.pdf_utils import create_pdf_report
-from optimizeai.config import Config
-import types
 import inspect
 import functools
 from io import StringIO
 from contextlib import redirect_stdout
 import sys
-import datetime
 import os
-if not os.path.exists("logs"):
-    os.makedirs("logs")
-formatted_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-os.environ['LOG_FILE_PATH'] = f"logs/{formatted_datetime}.log"
-
 from perfwatch import watch
+from optimizeai.llm_wrapper import LLMWrapper
+from optimizeai.config import Config
+import types
 
 def get_function_code(func):
     """Retrieve the source code of a function."""
@@ -68,18 +61,13 @@ def optimize(profiler_types, config: Config):
                     sys.settrace(None)
                 
                 captured_output = buf.getvalue()
-            captured_logs = str(open(os.getenv("LOG_FILE_PATH"), "r", encoding="utf-8").read())
-            captured_output += captured_logs
-
+            # print(str(list(called_funcs_code.values())[1:]))
+            # print(code)
+            # print(captured_output)
             # Initialize the LLMWrapper with the provided config
             llm_wrapper = LLMWrapper(config)
             response = llm_wrapper.send_request(code=str(code), context=str(list(called_funcs_code.values())[1:]), perf_metrics=captured_output)
             print(response)
-
-            # Create a PDF report from the response
-            pdf_path = f"logs/report_{formatted_datetime}.pdf"
-            create_pdf_report(response, pdf_path)
-
             return response
 
         return wrapper
